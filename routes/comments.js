@@ -111,23 +111,7 @@ router.post('/:videoId', authMiddleware, async (req, res) => {
       comment: commentWithUser
     });
 
-    // Notify video owner
-    const videoOwnerId = videoResult.rows[0].user_id;
-    if (videoOwnerId !== req.user.id) {
-      await pool.query(
-        `INSERT INTO notifications (user_id, from_user_id, video_id, type, message)
-         VALUES ($1, $2, $3, 'new_comment', $4)`,
-        [videoOwnerId, req.user.id, videoId, `${req.user.display_name} прокомментировал ваше видео`]
-      );
 
-      const notifResult = await pool.query(
-        'SELECT * FROM notifications WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1',
-        [videoOwnerId]
-      );
-      if (notifResult.rows[0]) {
-        sendToUser(videoOwnerId, { type: 'notification:new', notification: notifResult.rows[0] });
-      }
-    }
 
     res.status(201).json({ comment: commentWithUser });
   } catch (err) {

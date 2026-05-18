@@ -44,10 +44,16 @@
 }
 
 .drop-zone-icon {
-  font-size: 56px;
   margin-bottom: 20px;
-  display: block;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.drop-zone-icon svg {
+  width: 56px;
+  height: 56px;
 }
 
 .drop-zone-title {
@@ -97,7 +103,15 @@
 }
 
 .file-info-icon {
-  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+.file-info-icon svg {
+  width: 28px;
+  height: 28px;
 }
 
 .file-info-name {
@@ -236,8 +250,20 @@
 }
 
 .visibility-option-icon {
-  font-size: 24px;
   margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+.visibility-option-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.visibility-option.selected .visibility-option-icon {
+  color: var(--color-white);
 }
 
 .visibility-option-label {

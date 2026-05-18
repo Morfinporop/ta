@@ -37,19 +37,6 @@ function renderNavbar() {
           </button>
 
           <div class="dropdown" style="position: relative;">
-            <button class="btn-icon" id="notifications-btn" style="position: relative;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-              ${state.unreadNotificationsCount > 0 ? `
-                <span class="notif-badge">${state.unreadNotificationsCount > 9 ? '9+' : state.unreadNotificationsCount}</span>
-              ` : ''}
-            </button>
-            <div class="dropdown-menu" id="notifications-menu" style="display: none; min-width: 320px; max-width: 360px;"></div>
-          </div>
-
-          <div class="dropdown" style="position: relative;">
             <img 
               src="${user.avatar_url || '/assets/icons/profile.svg'}" 
               alt="${user.display_name}"
@@ -92,7 +79,6 @@ function renderNavbar() {
     userMenuBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       userMenu.style.display = userMenu.style.display === 'none' ? 'block' : 'none';
-      document.getElementById('notifications-menu').style.display = 'none';
     });
 
     userMenu.innerHTML = `
@@ -114,78 +100,16 @@ function renderNavbar() {
       </div>
     `;
 
-    // Notifications dropdown
-    const notificationsBtn = document.getElementById('notifications-btn');
-    const notificationsMenu = document.getElementById('notifications-menu');
-
-    notificationsBtn.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      notificationsMenu.style.display = notificationsMenu.style.display === 'none' ? 'block' : 'none';
-      userMenu.style.display = 'none';
-
-      if (notificationsMenu.style.display === 'block') {
-        await loadNotifications();
-      }
-    });
-
     // Close dropdowns when clicking outside
     document.addEventListener('click', () => {
       userMenu.style.display = 'none';
-      notificationsMenu.style.display = 'none';
     });
-
-    // Load notifications initially
-    loadNotifications();
   }
 }
 
 function closeDropdowns() {
   const userMenu = document.getElementById('user-menu');
-  const notificationsMenu = document.getElementById('notifications-menu');
   if (userMenu) userMenu.style.display = 'none';
-  if (notificationsMenu) notificationsMenu.style.display = 'none';
-}
-
-async function loadNotifications() {
-  try {
-    const data = await api.get('/users/me/notifications');
-    store.setNotifications(data.notifications, data.unreadCount);
-    renderNotifications(data.notifications);
-    
-    // Mark as read
-    if (data.unreadCount > 0) {
-      await api.post('/users/me/notifications/read');
-      store.setNotifications(data.notifications, 0);
-      renderNavbar();
-    }
-  } catch (err) {
-    console.error('Load notifications error:', err);
-  }
-}
-
-function renderNotifications(notifications) {
-  const menu = document.getElementById('notifications-menu');
-  if (!menu) return;
-
-  if (notifications.length === 0) {
-    menu.innerHTML = `
-      <div style="padding: 20px; text-align: center; color: var(--color-text-muted); font-size: var(--text-sm);">
-        Нет уведомлений
-      </div>
-    `;
-    return;
-  }
-
-  menu.innerHTML = notifications.slice(0, 5).map(notif => `
-    <div class="dropdown-item" style="white-space: normal; line-height: 1.4; padding: 12px;">
-      <div style="font-size: var(--text-sm); color: var(--color-text-primary); margin-bottom: 4px;">
-        ${notif.message}
-      </div>
-      <div style="font-size: var(--text-xs); color: var(--color-text-muted);">
-        ${formatDate(notif.created_at)}
-      </div>
-    </div>
-  `).join('');
 }
 
 async function logout() {

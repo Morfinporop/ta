@@ -383,9 +383,17 @@
 }
 
 .player-processing-icon {
-  font-size: 48px;
   margin-bottom: 20px;
   animation: pulse 2s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+.player-processing-icon svg {
+  width: 48px;
+  height: 48px;
 }
 
 .player-processing-text {

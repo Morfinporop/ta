@@ -3,8 +3,8 @@ const pool = require('./pool');
 async function runMigrations() {
   const client = await pool.connect();
   try {
-    await client.query('BEGIN');
-
+    console.log('Starting migrations...');
+    
     await client.query(`
       CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -99,18 +99,7 @@ async function runMigrations() {
       )
     `);
 
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS notifications (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-        from_user_id UUID REFERENCES users(id) ON DELETE CASCADE DEFAULT NULL,
-        video_id UUID REFERENCES videos(id) ON DELETE CASCADE DEFAULT NULL,
-        type VARCHAR(50) NOT NULL,
-        message TEXT NOT NULL,
-        is_read BOOLEAN DEFAULT FALSE,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-      )
-    `);
+
 
     // Indexes
     await client.query(`CREATE INDEX IF NOT EXISTS idx_videos_user_id ON videos(user_id)`);
@@ -120,18 +109,20 @@ async function runMigrations() {
     await client.query(`CREATE INDEX IF NOT EXISTS idx_subscriptions_channel ON subscriptions(channel_id)`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_comments_video_id ON comments(video_id)`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_video_views_video_id ON video_views(video_id)`);
-    await client.query(`CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id)`);
     await client.query(`
       CREATE INDEX IF NOT EXISTS idx_videos_search ON videos
-      USING GIN(to_tsvector('russian', coalesce(title,'') || ' ' || coalesce(description,'')))
+      USING GIN(to_tsvector('english', coalesce(title,'') || ' ' || coalesce(description,'')))
     `);
 
-    await client.query('COMMIT');
     console.log('Migrations completed successfully');
   } catch (err) {
-    await client.query('ROLLBACK');
     console.error('Migration error:', err);
-    throw err;
+    // Don't throw on duplicate errors, tables might already exist
+    if (err.code !== '23505' && err.code !== '42P07') {
+      throw err;
+    } else {
+      console.log('Tables already exist, skipping...');
+    }
   } finally {
     client.release();
   }

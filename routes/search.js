@@ -26,7 +26,7 @@ router.get('/', optionalAuth, async (req, res) => {
            FROM videos v
            JOIN users u ON v.user_id = u.id
            WHERE v.status = 'ready' AND v.visibility = 'public'
-           AND to_tsvector('russian', coalesce(v.title,'') || ' ' || coalesce(v.description,'')) @@ to_tsquery('russian', $1)
+           AND to_tsvector('english', coalesce(v.title,'') || ' ' || coalesce(v.description,'')) @@ to_tsquery('english', $1)
            ORDER BY ${orderBy}
            LIMIT 20`,
           [searchQuery]

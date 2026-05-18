@@ -17,7 +17,8 @@
   align-items: center;
   height: 100%;
   padding: 0 16px;
-  gap: 16px;
+  gap: 20px;
+  max-width: 100%;
 }
 
 /* Logo */
@@ -28,6 +29,7 @@
   text-decoration: none;
   flex-shrink: 0;
   cursor: pointer;
+  user-select: none;
 }
 
 .logo-icon {
@@ -56,9 +58,10 @@
 /* Search */
 .navbar-search {
   flex: 1;
-  max-width: 540px;
+  max-width: 600px;
   display: flex;
   gap: 0;
+  margin: 0 auto;
 }
 
 .search-input-wrapper {
@@ -108,8 +111,7 @@
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-left: auto;
+  gap: 12px;
   flex-shrink: 0;
 }
 

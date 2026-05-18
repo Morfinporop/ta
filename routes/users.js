@@ -109,22 +109,6 @@ router.post('/:username/subscribe', authMiddleware, async (req, res) => {
         [req.user.id, channel.id]
       );
       subscribed = true;
-
-      // Create notification
-      await pool.query(
-        `INSERT INTO notifications (user_id, from_user_id, type, message)
-         VALUES ($1, $2, 'new_subscriber', $3)`,
-        [channel.id, req.user.id, `${req.user.display_name} подписался на ваш канал`]
-      );
-
-      // Send notification via WebSocket
-      const notifResult = await pool.query(
-        'SELECT * FROM notifications WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1',
-        [channel.id]
-      );
-      if (notifResult.rows[0]) {
-        sendToUser(channel.id, { type: 'notification:new', notification: notifResult.rows[0] });
-      }
     }
 
     // Update subscribers_count atomically
@@ -149,40 +133,6 @@ router.post('/:username/subscribe', authMiddleware, async (req, res) => {
   }
 });
 
-// GET /api/users/me/notifications
-router.get('/me/notifications', authMiddleware, async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT n.*, u.display_name as from_display_name, u.avatar_url as from_avatar_url
-       FROM notifications n
-       LEFT JOIN users u ON n.from_user_id = u.id
-       WHERE n.user_id = $1
-       ORDER BY n.created_at DESC
-       LIMIT 20`,
-      [req.user.id]
-    );
 
-    const unread = await pool.query(
-      'SELECT COUNT(*) FROM notifications WHERE user_id = $1 AND is_read = FALSE',
-      [req.user.id]
-    );
-
-    res.json({ notifications: result.rows, unreadCount: parseInt(unread.rows[0].count) });
-  } catch (err) {
-    console.error('Notifications error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// POST /api/users/me/notifications/read
-router.post('/me/notifications/read', authMiddleware, async (req, res) => {
-  try {
-    await pool.query('UPDATE notifications SET is_read = TRUE WHERE user_id = $1', [req.user.id]);
-    res.json({ success: true });
-  } catch (err) {
-    console.error('Mark read error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
 
 module.exports = router;

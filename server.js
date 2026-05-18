@@ -23,6 +23,9 @@ const server = http.createServer(app);
 
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy for Railway
+app.set('trust proxy', 1);
+
 // Create upload directories
 const uploadDirs = ['uploads/videos', 'uploads/hls', 'uploads/thumbnails', 'uploads/avatars'];
 uploadDirs.forEach(dir => {

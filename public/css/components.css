@@ -404,9 +404,16 @@
 }
 
 .empty-state-icon {
-  font-size: 60px;
   margin-bottom: 24px;
   opacity: 0.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state-icon svg {
+  width: 60px;
+  height: 60px;
 }
 
 .empty-state-title {

@@ -5,9 +5,7 @@ class Store {
       isAuthenticated: false,
       currentPage: null,
       currentVideo: null,
-      currentChannel: null,
-      notifications: [],
-      unreadNotificationsCount: 0
+      currentChannel: null
     };
     this.subscribers = new Set();
   }
@@ -54,13 +52,6 @@ class Store {
 
   setCurrentChannel(channel) {
     this.setState({ currentChannel: channel });
-  }
-
-  setNotifications(notifications, unreadCount) {
-    this.setState({
-      notifications,
-      unreadNotificationsCount: unreadCount
-    });
   }
 }
 
