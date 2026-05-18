@@ -177,12 +177,15 @@ function setupRegisterValidation() {
   // Form submit
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     const username = usernameInput.value.trim().toLowerCase();
     const display_name = document.getElementById('displayname-input').value.trim();
     const email = document.getElementById('email-input').value.trim().toLowerCase();
     const password = passwordInput.value;
     const confirm = confirmInput.value;
+
+    console.log('Register form submit', { username, display_name, email });
 
     if (password !== confirm) {
       Toast.error('Пароли не совпадают');

@@ -8,23 +8,28 @@ const { registerLimiter, loginLimiter } = require('../middleware/rateLimit');
 // POST /api/auth/register
 router.post('/register', registerLimiter, async (req, res) => {
   try {
+    console.log('Register request:', req.body);
     const { username, display_name, email, password } = req.body;
 
     if (!username || !display_name || !email || !password) {
-      return res.status(400).json({ error: 'All fields are required' });
+      console.log('Missing fields');
+      return res.status(400).json({ error: 'Все поля обязательны' });
     }
 
     if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
-      return res.status(400).json({ error: 'Username must be 3-30 characters, letters, numbers and underscores only' });
+      console.log('Invalid username format');
+      return res.status(400).json({ error: 'Имя пользователя должно быть 3-30 символов, только латиница, цифры и _' });
     }
 
     if (password.length < 8) {
-      return res.status(400).json({ error: 'Password must be at least 8 characters' });
+      console.log('Password too short');
+      return res.status(400).json({ error: 'Пароль должен быть минимум 8 символов' });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: 'Invalid email format' });
+      console.log('Invalid email format');
+      return res.status(400).json({ error: 'Неверный формат email' });
     }
 
     const existingUser = await pool.query(
@@ -33,8 +38,8 @@ router.post('/register', registerLimiter, async (req, res) => {
     );
 
     if (existingUser.rows.length > 0) {
-      const taken = existingUser.rows[0];
-      return res.status(400).json({ error: 'Username or email already taken' });
+      console.log('User already exists');
+      return res.status(400).json({ error: 'Имя пользователя или email уже заняты' });
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
@@ -56,10 +61,11 @@ router.post('/register', registerLimiter, async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000
     });
 
+    console.log('User registered successfully:', user.username);
     res.status(201).json({ user });
   } catch (err) {
     console.error('Register error:', err);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
 
