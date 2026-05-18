@@ -1,0 +1,176 @@
+.search-page {
+  width: 100%;
+  max-width: 1400px;
+}
+
+.search-header {
+  margin-bottom: 28px;
+}
+
+.search-query {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.search-query-text {
+  color: var(--color-text-primary);
+}
+
+.search-results-count {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+}
+
+/* Filters */
+.search-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+/* Sections */
+.search-section {
+  margin-bottom: 40px;
+}
+
+.search-section:last-child {
+  margin-bottom: 0;
+}
+
+.search-section-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-section-count {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* Channels carousel */
+.channels-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+
+.channels-carousel::-webkit-scrollbar {
+  height: 6px;
+}
+
+.search-channel-card {
+  min-width: 200px;
+  padding: 16px;
+  background: var(--gradient-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.search-channel-card:hover {
+  border-color: var(--color-border-light);
+  transform: translateY(-2px);
+}
+
+.search-channel-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+  background: var(--color-bg-elevated);
+}
+
+.search-channel-name {
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.search-channel-username {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.search-channel-subs {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+/* Videos grid */
+.search-videos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1400px) {
+  .search-videos-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .search-videos-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .search-videos-grid { grid-template-columns: 1fr; }
+  
+  .channels-carousel {
+    gap: 8px;
+  }
+  
+  .search-channel-card {
+    min-width: 160px;
+    padding: 12px;
+  }
+  
+  .search-channel-avatar {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* Empty search results */
+.search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.search-empty-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.search-empty-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.search-empty-text {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  max-width: 400px;
+  line-height: 1.6;
+}

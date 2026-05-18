@@ -1,0 +1,61 @@
+.home-page {
+  width: 100%;
+}
+
+.home-header {
+  margin-bottom: 24px;
+}
+
+.home-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.home-subtitle {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+}
+
+/* Filters horizontal scroll */
+.home-filters {
+  margin-bottom: 28px;
+}
+
+/* Video grid defined in components.css */
+
+/* Loading skeleton grid */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1400px) {
+  .skeleton-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .skeleton-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .skeleton-grid { grid-template-columns: 1fr; }
+}
+
+.skeleton-video-card {
+  background: var(--gradient-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.skeleton-card-info {
+  padding: 12px;
+}
+
+.skeleton-card-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
